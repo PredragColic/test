@@ -6,7 +6,6 @@ class Category_model extends CI_Model {
 
     function __construct() {
         parent::__construct();
-        
     }
 
     public function get_all() {
@@ -18,6 +17,7 @@ class Category_model extends CI_Model {
             return FALSE;
         }
     }
+
     public function getCategory($id) {
         $res = $this->db->where('id', $id)->get('category');
         if ($res->num_rows() == 1) {
@@ -26,49 +26,69 @@ class Category_model extends CI_Model {
             return FALSE;
         }
     }
-    public function save($data){
-        
+
+    public function save($data) {
+
         $res = array(
             'status' => false,
             'data' => array()
         );
-        if( empty($data['id']) ){
+        if (empty($data['id'])) {
             $this->db->insert('category', $data);
             $id = $this->db->insert_id();
             $res['data'] = $this->getCategory($id);
-            if( !empty($res['data']) ){
+            if (!empty($res['data'])) {
                 $res['status'] = true;
             }
-            
-        }else{
+        } else {
             $this->db->trans_start();
-            $this->db->set('naziv',$this->input->post('naziv'))->where('id',$data['id'])->update('category');
+            $this->db->set('naziv', $this->input->post('naziv'))->where('id', $data['id'])->update('category');
             $this->db->trans_complete();
             if ($this->db->trans_status() === TRUE) {
                 $res['status'] = TRUE;
             }
             $res['data'] = $this->getCategory($data['id']);
-
         }
         return $res;
     }
-    
+
+    public function delete($id) {
+           
+        $categoryInfo = $this->getCategory($id);
+        $postsInCategory = $this->db->select('id')->where('category_id', $id)->get('posts')->result_array();
+        
+        $res = array(
+            'status' => FALSE,
+            'category' => $categoryInfo,
+            'posts' => $postsInCategory
+        ); 
+        $this->db->trans_start();
+        $this->db->where('id', $id)->delete('category');
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === TRUE) {
+            
+            $this->db->trans_start();
+            $this->db->where('category_id',$id)->delete('posts');
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === TRUE){
+                $res['status'] = TRUE;
+            }
+        }
+        return $res;    
+    }
+
     //Ne trebaju vise sve sam prebacio u method save
     public function addCategory($data) {
         $this->db->insert('category', $data);
         return ($this->db->affected_rows() == 1) ? true : false;
     }
 
-    
-
     public function updateCategory($data) {
         if (empty($data['id'])) {
             $this->addCategory($data);
         } else {
-            $this->db->where('id',$data['id'])->update('category',$data);
+            $this->db->where('id', $data['id'])->update('category', $data);
         }
     }
-    
-    
 
 }

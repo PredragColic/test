@@ -52,8 +52,8 @@ class Categories extends CI_Controller {
     }
     public function delete($id=NULL){
         $data = $this->category_model->getCategory($id);
-        $this->db->where('id',$id)->delete('category');
-        return $this->output->set_output(json_encode($data));
+        $res = $this->category_model->delete($id);
+        return $this->output->set_output(json_encode($res));
     }
    
     

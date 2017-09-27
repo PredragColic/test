@@ -6,6 +6,9 @@ class Posts extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        if(empty($this->session->userdata('id')) && empty($this->session->userdata('aloged_in')) ){
+            redirect(base_url('login'));
+        }
         $this->load->model('post_model');
     }
 
@@ -49,15 +52,27 @@ class Posts extends CI_Controller {
         $data = $this->post_model->getPost($id);
 
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('naziv', 'naziv', 'required|trim|is_unique[category.naziv]');
+        $this->form_validation->set_rules('title', 'title', 'required|trim');
+        $this->form_validation->set_rules('user_id', 'userID', 'required|trim');
+        $this->form_validation->set_rules('category_id', 'category_id', 'required|trim');
+        
         if ($this->form_validation->run() == FALSE) {
+            $this->load->model('category_model');
+            $data['categories'] = $this->category_model->get_all();
             $this->load->view('editPost', $data);
         } else {
             $res = $this->post_model->save($data);
-            redirect(base_url('categories'));
+            redirect(base_url('posts'));
         }
     }
     
-    
+    public function delete($id = NULL){
+        $postInfo=$this->post_model->getPost($id);
+        if($postInfo['user_id']!== $this->session->userdata('user_id')){
+            redirect('posts');
+        }
+        $res = $this->post_model->delete($id);
+        return $this->output->set_output(json_encode($res));
+    }
 
 }

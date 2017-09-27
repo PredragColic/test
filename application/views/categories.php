@@ -4,6 +4,7 @@
 <p class="text-right">
     <a class="btn btn-primary btn-lg" href="<?php echo base_url('categories/add'); ?>">Add new</a>
 </p>
+<?php if(!empty($categories)):?>
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -15,6 +16,7 @@
         </tr>    
     </thead>
     <tbody>
+        
         <?php foreach ($categories as $category) : ?>
             <tr>
                 <td><?php echo $category['id'] ?></td>
@@ -30,5 +32,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-
+<?php else :?>
+<p>We dont have categorry yet!</p>
+<?php endif;?>
 <?php include('inc/footer.php'); ?>

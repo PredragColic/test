@@ -2,7 +2,15 @@
 
 <h2>Registration</h2>
 <div class="col-md-6 col-md-offset-3">
-    <form class="form-horizontal" action='<?php echo base_url('pages/postRegistration'); ?>' method="POST">
+    <p class="text-cener text-warning"><?php echo validation_errors(); ?></p>    
+    <form class="form-horizontal" action='<?php echo base_url('pages/registration'); ?>' method="POST">
+        
+        <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputName" name="name" placeholder="Your name">
+            </div>
+        </div>
         <div class="form-group">
             <label for="inputEmail" class="col-sm-2 control-label">Email</label>
             <div class="col-sm-10">
