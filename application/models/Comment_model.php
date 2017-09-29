@@ -47,5 +47,21 @@ class Comment_model extends CI_Model {
         }
         return $res;
     }
+    
+    function update($data){
+        $res = array(
+            'status' => FALSE,
+            'data' => []
+        );
+        $this->db->trans_start();
+        $this->db->set('comment')->where('id', $data['id'])->update('comments',$data);
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === TRUE) {
+            $res['status'] = TRUE;
+            $res['data'] = $this->getComment($data['id']);
+        }
+        
+        return $res;
+    }
 
 }

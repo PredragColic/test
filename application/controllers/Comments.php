@@ -18,7 +18,7 @@ class Comments extends CI_Controller {
             'post_id' => $_POST['pid'],
             'user_id' => $this->session->userdata('user_id'),
             'name' => $this->session->userdata('username'),
-            'comment' => $_POST['comment']//$this->input->post('comment')
+            'comment' => htmlentities(nl2br($_POST['comment']))//$this->input->post('comment')
         );
         $res = $this->comment_model->addComment($data);
         
@@ -32,6 +32,16 @@ class Comments extends CI_Controller {
     public function delete(){
         $id = $_POST['id'];
         $res = $this->comment_model->delete($id);
+        return $this->output->set_output(json_encode($res));
+    }
+    
+    public function update(){
+        $data = array(
+            'id' => $_POST['id'],
+            'comment' => $_POST['comment'],
+        );
+        $res = $this->comment_model->update($data);
+        
         return $this->output->set_output(json_encode($res));
     }
     

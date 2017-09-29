@@ -5,7 +5,7 @@
 </p>
 <?php if(!empty($posts)):?>
     <?php foreach($posts as $post):?>
-        <h2><?=$post['title']?></h2>
+<h2><a href="<?=  base_url('read/'.$post['id'])?>"><?=$post['title']?></a></h2>
         <small><?=date('M d, Y',strtotime($post['created_at']))?> by <strong><?=$post['name']?></strong> in <a href="<?=base_url('category/'.$post['category_id'])?>"><?=$post['naziv']?></a></small>
         <p><?=$post['body']?></p>
         <?php if($post['user_id'] == $this->session->userdata('user_id')):?>
