@@ -22,7 +22,11 @@ class Post_model extends CI_Model {
     }
 
     public function getPost($id) {
-        $res = $this->db->where('id', $id)->get('posts');
+        $this->db->select('p.*,u.name,c.naziv');
+        $this->db->join('category as c', 'c.id = p.category_id','left');
+        $this->db->join('users as u', 'u.id = p.user_id','left');
+        $res = $this->db->where('p.id', $id)->get('posts as p');
+        
         if ($res->num_rows() > 0) {
             return $res->row_array(0);
         } else {
@@ -79,7 +83,7 @@ class Post_model extends CI_Model {
         if($postInfo['user_id']==$this->session->userdata('user_id')){
             $this->db->where('id',$id)->delete('posts');
         }
-        return $this->getPost($id);
+        return $this->getPost($id)==FALSE ? TRUE : FALSE;
                 
     }
 

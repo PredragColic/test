@@ -69,8 +69,13 @@ class Pages extends CI_Controller {
         $this->load->view('welcome_message', $data);
     }
 
-    public function test() {
-        $this->load->view('test');
+    public function read($id=NULL) {
+        $this->load->model('post_model');
+        $this->load->model('comment_model');
+        $data['post'] = $this->post_model->getPost($id);
+        $data['title'] = $data['post']['title'];
+        $data['comments'] = $this->comment_model->getPostComments($id);
+        $this->load->view('post',$data);
     }
 
 }

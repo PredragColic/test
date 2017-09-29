@@ -54,6 +54,7 @@ $route['login'] = 'pages/getLogin';
 $route['registration'] = 'pages/registration';
 $route['logout'] = 'pages/Logout';
 $route['category/(:num)'] = 'pages/category/$1';
+$route['read/(:num)'] = 'pages/read/$1';
 
 
 $route['404_override'] = '';
