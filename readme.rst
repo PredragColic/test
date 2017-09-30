@@ -1,3 +1,12 @@
+Installacija
+--------------------------------
+dump baze je u direktorijumu baza.
+potrebno je jos i upisati base_url  u fajlu application/config/config.php u 26 liniji koda.
+    $config['base_url'] = 'http://localhost/test/'; 
+
+
+
+
 ###################
 What is CodeIgniter
 ###################
